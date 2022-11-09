@@ -94,3 +94,12 @@ func (ll *LinkedList) ReverseLL() {
 	}
 	ll.head = previousNode
 }
+
+// containsNodeWithValue finds a value if it present in the linked list
+func (ll LinkedList) containsNodeWithValue(value int) *Node {
+	node := ll.head
+	for node != nil && node.val != value {
+		node = node.next
+	}
+	return node
+}
