@@ -1,63 +1,38 @@
 package closestinbst
 
-import "math"
-
 type BST struct {
-	root *Node
+	Val   int
+	Left  *BST
+	Right *BST
 }
 
-type Node struct {
-	key   byte
-	left  *Node
-	right *Node
-}
+// Time: O(log(n)); n is the number of nodes | Worst case: O(n) when the tree only has one branch
+// Space: O(1)
+func (tree *BST) findClosestValue(element int) int {
+	currentNode := tree
+	closestNode := tree.Val
 
-func (t *BST) insert(data byte) {
-	if t.root == nil {
-		t.root = &Node{key: data}
-	} else {
-		t.root.insert(data)
-	}
-}
-
-func (n *Node) insert(data byte) {
-	if data <= n.key {
-		if n.left == nil {
-			n.left = &Node{key: data}
-		} else {
-			n.left.insert(data)
+	for currentNode != nil {
+		if absoluteDiff(currentNode.Val, element) < absoluteDiff(closestNode, element) {
+			closestNode = currentNode.Val
 		}
-	} else {
-		if n.right == nil {
-			n.right = &Node{key: data}
+
+		if element < currentNode.Val {
+			currentNode = currentNode.Left
+		} else if element > currentNode.Val {
+			currentNode = currentNode.Right
 		} else {
-			n.right.insert(data)
+			break
 		}
 	}
+	return closestNode
 }
 
-func findClosestValueInBst(tree *BST, target int) int {
-	infVal := math.Inf(1)
-	return findClosestValueInBstHelper(tree, target, int(infVal))
-}
-
-// Average: O(log(n)) time | O(log(n)) space
-// Worst: O(n) time | O(n) space
-// Rescurive
-func findClosestValueInBstHelper(tree *BST, target int, closest int) int {
-	if tree == nil {
-		return closest
+func absoluteDiff(x int, y int) int {
+	if x > y {
+		return x - y
 	}
-	if math.Abs(float64(target)-float64(closest)) > math.Abs(float64(target)-float64(tree.root.key)) {
-		closest = int(tree.root.key)
-	}
-	if target < int(tree.root.key) {
-		return findClosestValueInBstHelper(tree.root.left, target, closest)
-	} else if target > int(tree.root.key) {
-		return findClosestValueInBstHelper(tree.root.right, target, closest)
-	} else {
-		return closest
-	}
+	return y - x
 }
 
 /*
@@ -68,13 +43,13 @@ Worst: O(n) time | O(1) space
 func findClosestValueInBstHelperInterative(tree *BST, target int, closest int) int {
 	currentNode := tree
 	for currentNode != nil {
-		if math.Abs(float64(target)-float64(closest)) > math.Abs(float64(target)-float64(currentNode.root.key)) {
-			closest = int(currentNode.root.key)
+		if absoluteDiff(currentNode.Val, target) < absoluteDiff(closest, target) {
+			closest = currentNode.Val
 		}
-		if target < int(currentNode.root.key) {
-			closest = int(currentNode.root.left.key)
-		} else if target > int(currentNode.root.key) {
-			closest = int(currentNode.root.right.key)
+		if target < currentNode.Val {
+			closest = currentNode.Left.Val
+		} else if target > currentNode.Val {
+			closest = currentNode.Right.Val
 		} else {
 			break
 		}
