@@ -6,11 +6,9 @@ type BST struct {
 	Right *BST
 }
 
-/*
-	Average: O(log(n)) time | O(1) space
+// Time: Average: O(log(n)) time | O(n) worst case -> Tree only has one branch
+// Space:O(1)
 
-Worst: O(n) time | O(1) space
-*/
 func (tree *BST) findClosestValueIterative(element int) int {
 	currentNode := tree
 	closestNode := tree.Val
@@ -38,6 +36,9 @@ func absoluteDiff(x int, y int) int {
 	return y - x
 }
 
+// Recursive implementation
+// Time: O(log(n)) average | o(n) worst
+// Space: O(log(n)) average | o(n) worst
 func (tree *BST) findClosestValueRecursive(element int) int {
 	return findClosestValLogic(tree, element, tree.Val)
 }
