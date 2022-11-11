@@ -6,9 +6,12 @@ type BST struct {
 	Right *BST
 }
 
-// Time: O(log(n)); n is the number of nodes | Worst case: O(n) when the tree only has one branch
-// Space: O(1)
-func (tree *BST) findClosestValue(element int) int {
+/*
+	Average: O(log(n)) time | O(1) space
+
+Worst: O(n) time | O(1) space
+*/
+func (tree *BST) findClosestValueIterative(element int) int {
 	currentNode := tree
 	closestNode := tree.Val
 
@@ -35,24 +38,22 @@ func absoluteDiff(x int, y int) int {
 	return y - x
 }
 
-/*
-	Average: O(log(n)) time | O(1) space
+func (tree *BST) findClosestValueRecursive(element int) int {
+	return findClosestValLogic(tree, element, tree.Val)
+}
 
-Worst: O(n) time | O(1) space
-*/
-func findClosestValueInBstHelperInterative(tree *BST, target int, closest int) int {
-	currentNode := tree
-	for currentNode != nil {
-		if absoluteDiff(currentNode.Val, target) < absoluteDiff(closest, target) {
-			closest = currentNode.Val
-		}
-		if target < currentNode.Val {
-			closest = currentNode.Left.Val
-		} else if target > currentNode.Val {
-			closest = currentNode.Right.Val
-		} else {
-			break
-		}
+func findClosestValLogic(tree *BST, element int, closest int) int {
+	if absoluteDiff(tree.Val, element) < absoluteDiff(closest, element) {
+		closest = tree.Val
 	}
+
+	if element < tree.Val && tree.Left != nil {
+		return findClosestValLogic(tree.Left, element, closest)
+	}
+
+	if element > tree.Val && tree.Right != nil {
+		return findClosestValLogic(tree.Right, element, closest)
+	}
+
 	return closest
 }
