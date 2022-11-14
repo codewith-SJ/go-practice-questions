@@ -7,7 +7,7 @@ import (
 func IterativebinarySearch(arr []int, target int) int {
 	sort.Ints(arr)
 	low := 0
-	high := len(arr) - 1
+	high := len(arr)
 
 	for low <= high {
 		mid := low + (high-low)/2
